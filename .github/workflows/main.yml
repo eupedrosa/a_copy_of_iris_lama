@@ -13,6 +13,7 @@ jobs:
     name: Build ROS
     runs-on: ubuntu-18.04
     strategy:
+      fail-fast: false
       matrix:
         ros_distribution: [kinetic, melodic, dashing, eloquent]
         include:
@@ -28,6 +29,7 @@ jobs:
     steps:
         # azure ubuntu repo can be flaky so add an alternate source
       - run: sed -e 's/azure.archive.ubuntu.com/us.archive.ubuntu.com/g' -e t -e d /etc/apt/sources.list | sudo tee /etc/apt/sources.list.d/nonazure.list
+      - run: sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
       - name: Acquire ROS dependencies
         uses: ros-tooling/setup-ros@0.0.20
         with:
