@@ -1,6 +1,8 @@
 LaMa - A Localization and Mapping library.
 ==========================================
-https://github.com/iris-ua/iris_lama
+https://github.com/iris-ua/iris_lama 
+
+![Build](https://github.com/eupedrosa/a_copy_of_iris_lama/workflows/Build/badge.svg)
 
 Developed and maintained by Eurico Pedrosa, University of Aveiro (C) 2019.
 
