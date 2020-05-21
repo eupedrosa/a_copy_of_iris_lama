@@ -15,14 +15,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ros_distribution: [melodic, dashing, eloquent]
+        ros_distribution: [kinetic, melodic, dashing, eloquent]
         include:
-          - docker_image: ubuntu:bionic
-            ros_distribution: melodic
-          - docker_image: ubuntu:bionic
-            ros_distribution: dashing
-          - docker_image: ubuntu:bionic
-            ros_distribution: eloquent
+          - container: ubuntu:xenial
+            ros_distribution: kinetic
     
     steps:
         # azure ubuntu repo can be flaky so add an alternate source
