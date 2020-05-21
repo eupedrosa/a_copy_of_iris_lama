@@ -1,19 +1,45 @@
-# This is a basic workflow to help you get started with Actions
 
 name: CI
 
-# Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the master branch
 on:
   push:
     branches: [ master ]
   pull_request:
     branches: [ master ]
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
+
+  build_ros:
+    name: Build ROS
+    runs-on: ubuntu-18.04
+    strategy:
+      matrix:
+        ros_distribution: [kinetic, melodic, dashing, eloquent]
+        include:
+          - docker_image: ubuntu:xenial
+            ros_distribution: kinetic
+          - docker_image: ubuntu:bionic
+            ros_distribution: melodic
+          - docker_image: ubuntu:bionic
+            ros_distribution: dashing
+          - docker_image: ubuntu:bionic
+            ros_distribution: eloquent
+    
+    steps:
+        # azure ubuntu repo can be flaky so add an alternate source
+      - run: sed -e 's/azure.archive.ubuntu.com/us.archive.ubuntu.com/g' -e t -e d /etc/apt/sources.list | sudo tee /etc/apt/sources.list.d/nonazure.list
+      - name: Acquire ROS dependencies
+        uses: ros-tooling/setup-ros@0.0.20
+        with:
+          required-ros-distributions: ${{ matrix.ros_distribution }}
+      - run: source /opt/ros/${{ matrix.ros_distribution }}/setup.bash
+      - name: Build ROS
+        uses: ros-tooling/action-ros-ci@0.0.16
+        with:
+          package-name: iris_lama
+        
+  build_cmake:
+    name: Build CMake
     # The type of runner that the job will run on
     runs-on: ubuntu-18.04
 
